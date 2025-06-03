@@ -17,11 +17,11 @@ async def main(args: Args):
         return_adv=True,
         service_uuids=args.services,
         cb={"use_bdaddr": args.macos_use_bdaddr},
+        timeout=10.0,
     )
 
     for d, a in devices.values():
         if device_name in a:
-            print(d)
             suffix = ': ' + device_name 
             address = str(d).replace(suffix, "")
             addresses.append(address)
@@ -44,11 +44,13 @@ if __name__ == "__main__":
 
 for a in addresses:
     print(a)
-
-#address = "E0:C6:BC:1A:E7:A9"
-#MODEL_NBR_UUID = ""
-#
-#async def main(address):
-#    async with BleakClient(address) as client:
-#        model_number = await client.read_gatt_char(MODEL_NUBR_UUID)
-#        print("Model number: {0}".format("".join( map(chr, model_number) ) ) )
+    MODEL_NBR_UUID = ""
+    async def main(a):
+        async with BleakClient(a) as client:
+            services = await client.get_services()
+            for service in services:
+                print(f"Service: {service.uuid}")
+            for char in service.characteristics:
+                print(f" Characteristic: {char.uuid}, Properties: {char.properties}")
+#            model_number = await client.read_gatt_char(MODEL_NUBR_UUID)
+#            print("Model number: {0}".format("".join( map(chr, model_number) ) ) )
