@@ -1,10 +1,54 @@
+import argparse
 import asyncio
+from bleak import BleakScanner
 from bleak import BleakClient
 
-address = "E0:C6:BC:1A:E7:A9"
-MODEL_NBR_UUID = ""
+class Args(argparse.Namespace):
+    macos_use_bdaddr: bool
+    services: list[str]
 
-async def main(address):
-    async with BleakClient(address) as client:
-        model_number = await client.read_gatt_char(MODEL_NUBR_UUID)
-        print("Model number: {0}".format("".join( map(chr, model_number) ) ) )
+device_name = 'Smart Humigadget'
+addresses = []
+
+async def main(args: Args):
+    print("scanning for 5 seconds, please wait...")
+
+    devices = await BleakScanner.discover(
+        return_adv=True,
+        service_uuids=args.services,
+        cb={"use_bdaddr": args.macos_use_bdaddr},
+    )
+
+    for d, a in devices.values():
+        if device_name in a:
+            print(d)
+            suffix = ': ' + device_name 
+            address = str(d).replace(suffix, "")
+            addresses.append(address)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+            "--services",
+            metavar="<uuid>",
+            nargs="*",
+            help="UUIDs of one or more services to filter for",
+        )
+    parser.add_argument(
+        "--macos-use-bdaddr",
+        action="store_true",
+        help="when true use Bluetooth address instead of UUID on macOS",
+    )
+    args = parser.parse_args(namespace=Args())
+    asyncio.run(main(args)) 
+
+for a in addresses:
+    print(a)
+
+#address = "E0:C6:BC:1A:E7:A9"
+#MODEL_NBR_UUID = ""
+#
+#async def main(address):
+#    async with BleakClient(address) as client:
+#        model_number = await client.read_gatt_char(MODEL_NUBR_UUID)
+#        print("Model number: {0}".format("".join( map(chr, model_number) ) ) )
