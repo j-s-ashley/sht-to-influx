@@ -1,0 +1,28 @@
+okaly dokaly
+
+running discover.py yields this tasty tidbit:
+
+```
+E0:C6:BC:1A:E7:A9: Smart Humigadget
+-----------------------------------
+AdvertisementData(local_name='Smart Humigadget', rssi=-64)
+```
+
+So, maybe all the ones we want to use will have that same `local_name` variable?? Would be super cool.
+
+Okie dokie. Cap'n Crunch levels of fo-cereal now.
+
+In trying to see about that `local_name` variable idea, I ended up discovering that the **ONE** button on these little doohickies does not function properly for most sensors.
+
+What it's supposed to do:
+ - Quick press: cycle between showing the dew point or relative humidity on the top line
+ - Long press (>1s): enable/disable bluetooth connectivity
+ - Hold down while inserting battery: switch between Celsius and Fahreneheit
+
+What it actually does:
+ - Quick press: sometimes freeze whatever numbers are displayed, sometimes display a blank screen for a few seconds, sometimes do nothing
+ - Long press (>1s): same as quick press results
+ - Hold down while inserting battery: switch between Celsius and Fahreneheit
+
+I did, however, confirm that the `local_name` variable is consistent.
+
