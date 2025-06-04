@@ -15,13 +15,13 @@ addresses = []
 
 # Look for bluetooth devices and grab address info
 async def main(args: Args):
-    print("scanning for SOME seconds, please wait...")
+    print("scanning for 10 seconds, please wait...")
 
     devices = await BleakScanner.discover(
         return_adv=True,
         service_uuids=args.services,
         cb={"use_bdaddr": args.macos_use_bdaddr},
-        timeout=30.0,
+        timeout=10.0,
     )
 
     print("Getting MAC addresses...")
@@ -50,9 +50,9 @@ if __name__ == "__main__":
 
 # Connect to each address
 for a in addresses:
-    print(a)
+    print(f"Connecting to {a}")
     async def main(a):
-        async with BleakClient(a) as client:
+        async with BleakClient(a, timeout=15.0) as client:
             services = await client.get_services()
     asyncio.run(main(a))
 
@@ -84,10 +84,6 @@ async def read_sensor_data():
                 print(f"Temperature: {temperature}")
                 print(f"Humidity: {humidity}")
 
-                #point = Point("sht31")
-                #point.tag("device", a)
-                #point.field("temperature", temperature)
-                #point.field("humidity", humidity)
         except Exception as e:
             print(f"Failed for {a}: {e}")
 
