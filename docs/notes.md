@@ -63,4 +63,33 @@ These snippets imply that I ought to be able to use
  - `HUMIDITY_UUID = 1235`
 since we need the characteristic UUIDs. Right?
 
+## Timeout error
 
+I keep getting this nonsense.
+
+```
+Traceback (most recent call last):
+  File "/usr/lib64/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib64/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/opt/local/strips/ITk/sht31-to-influx/sensor-connect.py", line 57, in <module>
+    asyncio.run(main(a))
+  File "/usr/lib64/python3.9/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib64/python3.9/asyncio/base_events.py", line 647, in run_until_complete
+    return future.result()
+  File "/opt/local/strips/ITk/sht31-to-influx/sensor-connect.py", line 55, in main
+    async with BleakClient(a) as client:
+  File "/opt/local/strips/ITk/sht31-to-influx/sht-venv/lib64/python3.9/site-packages/bleak/__init__.py", line 570, in __aenter__
+    await self.connect()
+  File "/opt/local/strips/ITk/sht31-to-influx/sht-venv/lib64/python3.9/site-packages/bleak/__init__.py", line 615, in connect
+    return await self._backend.connect(**kwargs)
+  File "/opt/local/strips/ITk/sht31-to-influx/sht-venv/lib64/python3.9/site-packages/bleak/backends/bluezdbus/client.py", line 315, in connect
+    raise
+  File "/opt/local/strips/ITk/sht31-to-influx/sht-venv/lib64/python3.9/site-packages/async_timeout/__init__.py", line 141, in __aexit__
+    self._do_exit(exc_type)
+  File "/opt/local/strips/ITk/sht31-to-influx/sht-venv/lib64/python3.9/site-packages/async_timeout/__init__.py", line 228, in _do_exit
+    raise asyncio.TimeoutError
+asyncio.exceptions.TimeoutError
+```
