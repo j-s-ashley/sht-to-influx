@@ -44,7 +44,6 @@ if __name__ == "__main__":
 
 for a in addresses:
     print(a)
-#    MODEL_NBR_UUID = "180A"
     async def main(a):
         async with BleakClient(a) as client:
             services = await client.get_services()
@@ -52,7 +51,5 @@ for a in addresses:
                 print(f"Service: {service.uuid}")
             for char in service.characteristics:
                 print(f" Characteristic: {char.uuid}, Properties: {char.properties}")
-#            model_number = await client.read_gatt_char(MODEL_NUBR_UUID)
-#            print("Model number: {0}".format("".join( map(chr, model_number) ) ) )
 
     asyncio.run(main(a))
