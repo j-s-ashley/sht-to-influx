@@ -56,7 +56,7 @@ for a in addresses:
             services = await client.get_services()
     asyncio.run(main(a))
 
-CHAR_UUID = "0xF238"
+CHAR_UUID = "F238"
 """
     This UUID was hard to find.
     It was found in line 39 of LoggerService.cpp in the SHT31 Firmware
