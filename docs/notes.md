@@ -126,3 +126,12 @@ Traceback (most recent call last):
 bleak.exc.BleakError: failed to discover services, device disconnected
 
 ```
+# Day 3
+
+Aight. Got some progress.
+
+For the record:
+"char_uuids": [
+          "temperature": "00002235-b38d-4985-720e-0f993a68ee41",
+          "humidity:     "00001235-b38d-4985-720e-0f993a68ee41"
+      ]
