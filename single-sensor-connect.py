@@ -35,7 +35,6 @@ async def main(a):
         await asyncio.sleep(1)
 
 # --- OUTPUT DATA --- #
-
 if __name__ == "__main__":
     # parse address argument
     parser = argparse.ArgumentParser(

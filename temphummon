@@ -6,7 +6,7 @@ usr=$2
 pwrd=$3
 
 JSON_FILE="/opt/local/strips/ITk/sht31-to-influx/docs/sensor-info.json"
-PYTHON_SCRIPT="/opt/local/strips/ITk/sht31-to-influx/single-sensor-connect"
+PYTHON_SCRIPT="/opt/local/strips/ITk/sht31-to-influx/single-sensor-connect.py"
 
 # Function to run a single sensor instance
 run_sensor() {
