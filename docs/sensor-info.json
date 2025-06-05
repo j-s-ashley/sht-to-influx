@@ -1,36 +1,37 @@
-{
-    "sensors": [
+[
         {
-            "ID":      "VS502081601706",
-            "address": "E1:63:4D:D6:6A:48"
+            "device_id": "VS502081601706",
+            "address":   "E1:63:4D:D6:6A:48",
+            "location":  "6040-dry-box"
         },
         {
-            "ID":      "VS502081600903",
-            "address": "C3:52:57:5D:AC:0F"
+            "device_id": "VS502081600903",
+            "address":   "C3:52:57:5D:AC:0F",
+            "location":  "6040-dry-box"
         },
         {
-            "ID":      "VS502081600897",
-            "address": "F0:77:20:CF:B2:43"
+            "device_id": "VS502081600897",
+            "address":   "F0:77:20:CF:B2:43",
+            "location":  "6040-dry-box"
         },
         {
-            "ID":      "VS502043401935",
-            "address": "E7:C4:07:89:87:80"
+            "device_id": "VS502043401935",
+            "address":   "E7:C4:07:89:87:80",
+            "location":  "6040-dry-box"
         },
         {
-            "ID":      "VS501929202931",
-            "address": "E0:C6:BC:1A:E7:A9"
+            "device_id": "VS501929202931",
+            "address":   "E0:C6:BC:1A:E7:A9",
+            "location":  "6040-clean-room"
         },
         {
-            "ID":      "VS501929201938",
-            "address": "D9:06:6C:6D:75:83"
+            "device_id": "VS501929201938",
+            "address":   "D9:06:6C:6D:75:83",
+            "location":  "6040-clean-room"
         },
         {
-            "ID":      "VS501895501732",
-            "address": "CA:2C:31:A4:53:8A"
+            "device_id": "VS501895501732",
+            "address":   "CA:2C:31:A4:53:8A",
+            "location":  "6040-clean-room"
         },
-    ],
-    "char_uuids": [
-        "temperature": "00002235-b38d-4985-720e-0f993a68ee41",
-        "humidity:     "00001235-b38d-4985-720e-0f993a68ee41"
-    ]
-}
+]
