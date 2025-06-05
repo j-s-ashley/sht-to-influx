@@ -1,0 +1,30 @@
+#!/bin/bash
+
+db=$1
+usr=$2
+pwrd=$3
+
+JSON_FILE="sensor-info.json"
+PYTHON_SCRIPT="single-sensor-connect"
+
+# Function to run a single sensor instance
+run_sensor() {
+  local db="$1"
+  local usr="$2"
+  local pwrd="$3"
+  local address="$4"
+  local location="$5"
+
+  python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.temphumeater.TempHumEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum
+  done
+}
+
+# Loop through devices in the JSON config
+jq -c '.[]' "$JSON_FILE" | while read -r row; do
+  address=$(echo "$row" | jq -r '.address')
+  location=$(echo "$row" | jq -r '.location')
+
+  run_sensor "$db" "$usr" "$pwrd" "$address" "$location" &
+done
+
+wait
