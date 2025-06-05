@@ -56,7 +56,7 @@ for a in addresses:
             services = await client.get_services()
     asyncio.run(main(a))
 
-CHAR_UUID = "F238"
+CHAR_UUID = "2235"
 """
     This UUID was hard to find.
     It was found in line 39 of LoggerService.cpp in the SHT31 Firmware
@@ -78,11 +78,12 @@ async def read_sensor_data():
         try:
             async with BleakClient(a) as client:
                 data = await client.read_gatt_char(CHAR_UUID)
-                temperature, humidity = parse_sensor_data(data)
+                #temperature, humidity = parse_sensor_data(data)
                 
                 print(f"Reading {a}")
-                print(f"Temperature: {temperature}")
-                print(f"Humidity: {humidity}")
+                #print(f"Temperature: {temperature}")
+                #print(f"Humidity: {humidity}")
+                print(f"data output: {data}")
 
         except Exception as e:
             print(f"Failed for {a}: {e}")
