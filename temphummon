@@ -1,4 +1,5 @@
 #!/bin/bash
+source /opt/local/strips/ITk/sht31-to-influx/sht-venv/bin/activate
 
 db=$1
 usr=$2
