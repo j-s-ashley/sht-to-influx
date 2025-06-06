@@ -13,18 +13,18 @@ run_sensor() {
   local db="$1"
   local usr="$2"
   local pwrd="$3"
-  local address="$4"
-  local location="$5"
+  local device_name="$4"
+  local address="$5"
 
-  python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.temphumeater.TempHumEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum
+  python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.temphumeater.TempHumEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name"
 }
 
 # Loop through devices in the JSON config
 jq -c '.[]' "$JSON_FILE" | while read -r row; do
+  device_name=$(echo "$row" | jq -r '.device_name')
   address=$(echo "$row" | jq -r '.address')
-  location=$(echo "$row" | jq -r '.location')
 
-  run_sensor "$db" "$usr" "$pwrd" "$address" "$location" &
+  run_sensor "$db" "$usr" "$pwrd" "$device_name" "$address" &
 done
 
 wait

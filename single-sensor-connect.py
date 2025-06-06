@@ -15,12 +15,8 @@ def parse_sensor_data(traw, hraw):
 
 # --- CONNECT TO SENSOR & READ DATA STREAM --- #
 async def main(a):
-    print(f"Connecting to {a}")
-    async with BleakClient(a, timeout=90.0) as client:
-        services = await client.get_services()
-    
-    print(f"Reading data stream from {a}")
-    print("Temperature\tRelative Humidity")
+    #print(f"Reading data stream from {a}")
+    #print("Temperature\tRelative Humidity")
 
     while True:
         try:
