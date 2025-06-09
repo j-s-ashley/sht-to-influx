@@ -48,6 +48,7 @@ if __name__ == "__main__":
         help='MAC address of the BLE device (e.g., AA:BB:CC:DD:EE:FF)'
     )
     args    = parser.parse_args()
+    device_name = args.device_name
     address = args.address
     
     # do the things
