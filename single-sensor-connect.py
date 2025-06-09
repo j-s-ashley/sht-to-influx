@@ -51,4 +51,4 @@ if __name__ == "__main__":
     address = args.address
     
     # do the things
-    asyncio.run(main(address))
+    asyncio.run(main(name, address))
