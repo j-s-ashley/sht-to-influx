@@ -14,24 +14,41 @@ def parse_sensor_data(traw, hraw):
     return t, h
 
 # --- CONNECT TO SENSOR & READ DATA STREAM --- #
-async def main(device_name, address):
-    #print("Device Name\tTemperature\tRelative Humidity")
+async def sensor_session(device_name, address, on_disconnect=None):
+    client = BleakClient(address)
+    disconnect_event = asyncio.Event()
 
+    client.set_disconnected_callback(lambda client: disconnect_event.set())
+    try:
+        await client.connect()
+        if not client.is_connected:
+            raise RuntimeError("Connect failed")
+
+        while client.is_connected:
+            tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
+            hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
+            temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
+            print(f"{device_name}\t{temperature}\t{humidity}")
+            await asyncio.sleep(poll_interval)
+            if on_disconnect and disconnect_event.is_set():
+                break
+
+async def main(device_name, address):
     while True:
         try:
             async with BleakClient(address, timeout=90.0) as client:
-                tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
-                hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
-                temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
-                print(f"{device_name}\t{temperature}\t{humidity}")
 
         except Exception as e:
             print(f"Failed for {address}: {e}")
         await asyncio.sleep(1)
 
-# --- OUTPUT DATA --- #
+    while True:
+        try:
+            await sensor_session(device_name, address, on_disconnect=lambda)
+        await asyncio.sleep(5)
+
+# --- PARSE NAME, ADDRESS ARGUMENTS AND RUN --- #
 if __name__ == "__main__":
-    # parse name, address arguments
     parser = argparse.ArgumentParser(
         description="Connect to SHT via MAC address"
     )
@@ -51,5 +68,4 @@ if __name__ == "__main__":
     device_name = args.device_name
     address = args.address
     
-    # do the things
     asyncio.run(main(device_name, address))
