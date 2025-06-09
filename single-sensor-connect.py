@@ -15,7 +15,7 @@ def parse_sensor_data(traw, hraw):
 
 # --- CONNECT TO SENSOR & READ DATA STREAM --- #
 async def sensor_session(device_name, address, on_disconnect=None):
-    client = BleakClient(address)
+    client = BleakClient(address, disconnected_callback=lambda client: disconnect_event.set())
     disconnect_event = asyncio.Event()
 
     client.set_disconnected_callback(lambda client: disconnect_event.set())
