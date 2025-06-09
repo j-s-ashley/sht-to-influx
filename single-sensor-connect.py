@@ -40,7 +40,10 @@ async def sensor_session(device_name, address, on_disconnect=None):
 async def main(device_name, address):
     while True:
         try:
-            await sensor_session(device_name, address, on_disconnect=lambda)
+            await sensor_session(
+                device_name,
+                address,
+                on_disconnect=lambda: print("Disconnected – will reconnect in 5s") )
         await asyncio.sleep(5)
 
 # --- PARSE NAME, ADDRESS ARGUMENTS AND RUN --- #
