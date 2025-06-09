@@ -36,14 +36,6 @@ async def sensor_session(device_name, address, on_disconnect=None):
 async def main(device_name, address):
     while True:
         try:
-            async with BleakClient(address, timeout=90.0) as client:
-
-        except Exception as e:
-            print(f"Failed for {address}: {e}")
-        await asyncio.sleep(1)
-
-    while True:
-        try:
             await sensor_session(device_name, address, on_disconnect=lambda)
         await asyncio.sleep(5)
 
