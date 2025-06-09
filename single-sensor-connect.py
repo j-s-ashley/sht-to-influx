@@ -32,6 +32,10 @@ async def sensor_session(device_name, address, on_disconnect=None):
             await asyncio.sleep(poll_interval)
             if on_disconnect and disconnect_event.is_set():
                 break
+    finally:
+        await client.disconnect()
+        if on_disconnect:
+            await on_disconnect()
 
 async def main(device_name, address):
     while True:
