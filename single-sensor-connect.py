@@ -28,8 +28,10 @@ async def sensor_session(device_name, address, on_disconnect=None):
             tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
             hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
             temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
+
             print(f"{device_name}\t{temperature}\t{humidity}")
             await asyncio.sleep(poll_interval)
+
             if on_disconnect and disconnect_event.is_set():
                 break
     finally:
@@ -44,6 +46,8 @@ async def main(device_name, address):
                 device_name,
                 address,
                 on_disconnect=lambda: print("Disconnected – will reconnect in 5s") )
+        except Exception as e:
+            print(f"Session error: {e}")
         await asyncio.sleep(5)
 
 # --- PARSE NAME, ADDRESS ARGUMENTS AND RUN --- #
