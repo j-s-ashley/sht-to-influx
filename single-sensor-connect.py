@@ -16,12 +16,18 @@ def parse_sensor_data(traw, hraw):
 # --- CONNECT TO SENSOR & READ DATA STREAM --- #
 async def main(device_name, address):
     #print("Device Name\tTemperature\tRelative Humidity")
-    client = BleakClient(address, timeout=90.0)
-    tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
-    hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
-    temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
-    print(f"{device_name}\t{temperature}\t{humidity}")
-    await asyncio.sleep(1)
+
+    while True:
+        try:
+            async with BleakClient(address, timeout=90.0) as client:
+                tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
+                hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
+                temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
+                print(f"{device_name}\t{temperature}\t{humidity}")
+
+        except Exception as e:
+            print(f"Failed for {address}: {e}")
+        await asyncio.sleep(1)
 
 # --- OUTPUT DATA --- #
 if __name__ == "__main__":
