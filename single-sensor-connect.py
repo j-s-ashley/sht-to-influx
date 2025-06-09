@@ -14,9 +14,8 @@ def parse_sensor_data(traw, hraw):
     return t, h
 
 # --- CONNECT TO SENSOR & READ DATA STREAM --- #
-async def main(a):
-    #print(f"Reading data stream from {a}")
-    #print("Temperature\tRelative Humidity")
+async def main(name, address):
+    #print("Device Name\tTemperature\tRelative Humidity")
 
     while True:
         try:
@@ -24,10 +23,10 @@ async def main(a):
                 tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
                 hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
                 temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
-                print(f"{temperature}\t{humidity}")
+                print(f"{name}\t{temperature}\t{humidity}")
 
         except Exception as e:
-            print(f"Failed for {a}: {e}")
+            print(f"Failed for {address}: {e}")
         await asyncio.sleep(1)
 
 # --- OUTPUT DATA --- #
