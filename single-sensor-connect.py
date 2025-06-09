@@ -36,6 +36,12 @@ if __name__ == "__main__":
         description="Connect to SHT via MAC address"
     )
     parser.add_argument(
+        '--name', 
+        type=str, 
+        required=True, 
+        help='Custom name of the BLE device'
+    )
+    parser.add_argument(
         '--address', 
         type=str, 
         required=True, 
