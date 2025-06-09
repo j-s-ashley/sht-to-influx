@@ -9,7 +9,7 @@ run_sensor() {
   local device_name="$1"
   local address="$2"
 
-  python3 "$PYTHON_SCRIPT" --name "$device_name" --address "$address" 
+  python3 "$PYTHON_SCRIPT" --device_name "$device_name" --address "$address" 
 }
 
 # Loop through devices in the JSON config
