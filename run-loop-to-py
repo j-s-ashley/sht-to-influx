@@ -2,7 +2,7 @@
 source /opt/local/strips/ITk/sht31-to-influx/sht-venv/bin/activate
 
 JSON_FILE="/opt/local/strips/ITk/sht31-to-influx/docs/sensor-info.json"
-PYTHON_SCRIPT="/opt/local/strips/ITk/sht31-to-influx/single-sensor-connect.py"
+PYTHON_SCRIPT="/opt/local/strips/ITk/sht31-to-influx/connect-with-name.py"
 
 # Function to run a single sensor instance
 run_sensor() {
