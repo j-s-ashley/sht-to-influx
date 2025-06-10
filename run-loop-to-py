@@ -17,7 +17,7 @@ jq -c '.[]' "$JSON_FILE" | while read -r row; do
   device_name=$(echo "$row" | jq -r '.device_name')
   address=$(echo "$row" | jq -r '.address')
 
-  run_sensor "$db" "$usr" "$pwrd" "$device_name" "$address" &
+  run_sensor "$device_name" "$address" &
 done
 
 wait
