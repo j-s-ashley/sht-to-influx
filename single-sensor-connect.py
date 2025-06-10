@@ -14,8 +14,8 @@ def parse_sensor_data(traw, hraw):
     return t, h
 
 # --- CONNECT TO SENSOR & READ DATA STREAM --- #
-async def main(device_name, address):
-    #print("Device Name\tTemperature\tRelative Humidity")
+async def main(address):
+    #print("Temperature\tRelative Humidity")
 
     while True:
         try:
@@ -23,7 +23,7 @@ async def main(device_name, address):
                 tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
                 hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
                 temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
-                print(f"{device_name}\t{temperature}\t{humidity}")
+                print(f"{temperature}\t{humidity}")
 
         except Exception as e:
             print(f"Failed for {address}: {e}")
@@ -36,20 +36,13 @@ if __name__ == "__main__":
         description="Connect to SHT via MAC address"
     )
     parser.add_argument(
-        '--device_name', 
-        type=str, 
-        required=True, 
-        help='Custom name of the BLE device'
-    )
-    parser.add_argument(
         '--address', 
         type=str, 
         required=True, 
         help='MAC address of the BLE device (e.g., AA:BB:CC:DD:EE:FF)'
     )
     args    = parser.parse_args()
-    device_name = args.device_name
     address = args.address
     
     # do the things
-    asyncio.run(main(device_name, address))
+    asyncio.run(main(address))
