@@ -24,6 +24,11 @@ async def read_sensor(name, mac):
         async def handle_humidity(_, data):
             humidity = int.from_bytes(data, byteorder='little') / 100
             print(f"[{name}] Humidity: {humidity:.2f}")
+	
+        for service in client.services:
+            print(f"Service: {service.uuid}")
+            for char in service.characteristics:
+                print(f"  Characteristic: {char.uuid}")
 
         await client.start_notify(TEMPERATURE_CHAR_UUID, handle_temperature)
         await client.start_notify(HUMIDITY_CHAR_UUID, handle_humidity)
