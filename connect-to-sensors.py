@@ -1,13 +1,21 @@
 import asyncio
 import json
 from bleak import BleakClient
+from bleak import BleakScanner
 
 TEMPERATURE_CHAR_UUID = "00002235-b38d-4985-720e-0f993a68ee41"
 HUMIDITY_CHAR_UUID    = "00001235-b38d-4985-720e-0f993a68ee41"
 
+async def ensure_visible(mac):
+    device = await BleakScanner.find_device_by_address(mac, timeout=5.0)
+    if not device:
+        raise Exception(f"Device {mac} not found in scan.")
+    return device
+
 async def read_sensor(name, mac):
-    async with BleakClient(mac) as client:
-        print(f"\nConnected to {name} ({mac})")
+    device = await ensure_visible(mac)
+    async with BleakClient(device) as client:
+        print(f"\nConnected to {name} ({device})")
 
         async def handle_temperature(_, data):
             temp_c = int.from_bytes(data, byteorder='little', signed=True) / 100
