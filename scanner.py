@@ -9,8 +9,6 @@ async def main(a):
             for char in service.characteristics:
                 print(f"  Characteristic: {char.uuid} | {char.description}")
 
-asyncio.run(main())
-
 if __name__ == "__main__":
     # parse name, address arguments
     parser = argparse.ArgumentParser(
