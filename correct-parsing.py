@@ -28,9 +28,9 @@ async def read_sensor(name, mac):
 
 async def main(device_name, address):
         try:
-            await read_sensor(sensor["device_name"], sensor["address"])
+            await read_sensor(device_name, address)
         except Exception as e:
-            print(f"Error with {sensor['device_name']} ({sensor['address']}): {e}")
+            print(f"Error with {device_name} ({address}): {e}")
 
 if __name__ == "__main__":
     # parse name, address arguments
