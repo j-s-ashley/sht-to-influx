@@ -27,7 +27,7 @@ async def read_sensor(name, mac):
         print(f"Disconnected from {name}")
 
 async def main():
-    with open("sensor-info.json", "r") as f:
+    with open("docs/sensor-info.json", "r") as f:
         sensors = json.load(f)
 
     tasks = [read_sensor(sensor["name"], sensor["mac"]) for sensor in sensors]
