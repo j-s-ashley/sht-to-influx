@@ -30,7 +30,7 @@ async def main():
     with open("docs/sensor-info.json", "r") as f:
         sensors = json.load(f)
 
-    tasks = [read_sensor(sensor["name"], sensor["mac"]) for sensor in sensors]
+    tasks = [read_sensor(sensor["device_name"], sensor["address"]) for sensor in sensors]
     await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
