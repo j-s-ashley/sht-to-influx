@@ -30,8 +30,12 @@ async def main():
     with open("docs/sensor-info.json", "r") as f:
         sensors = json.load(f)
 
-    tasks = [read_sensor(sensor["device_name"], sensor["address"]) for sensor in sensors]
-    await asyncio.gather(*tasks)
+    for sensor in sensors:
+        try:
+            await read_sensor(sensor["device_name"], sensor["address"])
+        except Exception as e:
+            print(f"Error with {sensor['device_name']} ({sensor['address']}): {e}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
