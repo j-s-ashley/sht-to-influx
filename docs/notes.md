@@ -135,3 +135,20 @@ For the record:
           "temperature": "00002235-b38d-4985-720e-0f993a68ee41",
           "humidity:     "00001235-b38d-4985-720e-0f993a68ee41"
       ]
+
+# Day ... 7?
+
+The process that I want:
+
+1. Connect to sensor
+2. Read data
+3. Send data to InFlux
+
+What that process actually breaks down into:
+
+1. Contact MAC address
+2. Identify data stream
+3. Read data from stream
+4. Parse data into InFlux-readable form
+5. Output readable data
+6. Send data to InFlux
