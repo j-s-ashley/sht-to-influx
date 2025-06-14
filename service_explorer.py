@@ -54,6 +54,7 @@ async def main(args: Args):
         device,
         pair=args.pair,
         services=args.services,
+        timeout=60.0,
     ) as client:
         logger.info("connected")
 
