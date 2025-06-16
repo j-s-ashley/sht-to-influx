@@ -152,3 +152,30 @@ What that process actually breaks down into:
 4. Parse data into InFlux-readable form
 5. Output readable data
 6. Send data to InFlux
+
+The discover.py example script from `bleak` works.
+
+## Potential issue: service_explorer.py example script from `bleak` does not work
+
+"device_name": "sht-sally",
+"address":     "E1:63:4D:D6:6A:48", error
+
+"device_name": "sht-monica",
+"address":     "C3:52:57:5D:AC:0F", not included due to other issue
+
+"device_name": "sht-earl",
+"address":     "F0:77:20:CF:B2:43", error
+
+"device_name": "sht-luigi",
+"address":     "E7:C4:07:89:87:80", error
+
+"device_name": "sht-shawna",
+"address":     "E0:C6:BC:1A:E7:A9", error
+
+"device_name": "sht-johannes",
+"address":     "D9:06:6C:6D:75:83", error
+
+"device_name": "sht-chien",
+"address":     "CA:2C:31:A4:53:8A", error
+
+
