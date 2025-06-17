@@ -16,7 +16,7 @@ run_sensor() {
   local device_name="$4"
   local address="$5"
 
-  python3 "$PYTHON_SCRIPT" --device_name "$device_name" --address "$address" | python3 moneater.py eaters.temphumeater.TempHumEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name"
+  python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.temphumeater.TempHumEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name"
 }
 
 # Loop through devices in the JSON config
