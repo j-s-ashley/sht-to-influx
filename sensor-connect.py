@@ -31,7 +31,7 @@ async def stream_data(client):
 
 async def main(address):
     async with BleakClient(address, timeout=max_time) as client:
-        await read_loop(client)
+        await stream_data(client)
 
 # --- PARSE NAME, ADDRESS ARGUMENTS AND RUN --- #
 if __name__ == "__main__":
