@@ -3,6 +3,8 @@ import asyncio # asynchronous connections
 import struct # allows data unpacking
 from bleak import BleakClient
 
+# --- DEFINITIONS --- #
+# These are vendor-specific IDs for the temperature/humidity data
 TMP_CHAR_UUID = "00002235-b38d-4985-720e-0f993a68ee41"
 HUM_CHAR_UUID = "00001235-b38d-4985-720e-0f993a68ee41"
 
@@ -22,9 +24,8 @@ async def stream_data(client):
             tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
             hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
             temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
-            print(f"Reading {address}")
-            print(f"Temperature: {temperature}")
-            print(f"Humidity: {humidity}")
+            print("Temperature\tHumidity")
+            print(f"{temperature}\t{humidity}")
         except Exception as e:
             print(f"Failed for {address}: {e}")
         await asyncio.sleep(sleep_time)
