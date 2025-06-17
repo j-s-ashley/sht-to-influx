@@ -24,7 +24,6 @@ async def stream_data(client):
             tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
             hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
             temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
-            print("Temperature\tHumidity")
             print(f"{temperature}\t{humidity}")
         except Exception as e:
             print(f"Failed for {address}: {e}")
@@ -32,6 +31,7 @@ async def stream_data(client):
 
 async def main(address):
     async with BleakClient(address, timeout=max_time) as client:
+        print("Temperature\tHumidity")
         await stream_data(client)
 
 # --- PARSE NAME, ADDRESS ARGUMENTS AND RUN --- #
