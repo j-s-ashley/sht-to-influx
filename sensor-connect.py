@@ -4,23 +4,28 @@ import struct # allows data unpacking
 from bleak import BleakScanner
 from bleak import BleakClient
 
-def parse_sensor_data(data: bytes):
-    temp_raw, hum_raw = struct.unpack("<HH", data)
-    temperature = -45 + (175 * temp_raw / 65535.0)
-    humidity = 100 * hum_raw / 65535.0
-    return temperature, humidity
+TMP_CHAR_UUID = "00002235-b38d-4985-720e-0f993a68ee41"
+HUM_CHAR_UUID = "00001235-b38d-4985-720e-0f993a68ee41"
+
+# --- DECODE SENSOR DATA STREAM --- #
+def parse_sensor_data(traw, hraw):
+    # Data is in bytearray format, '<f' = little-endian float
+    t = struct.unpack('<f', traw)[0]
+    h = struct.unpack('<f', hraw)[0]
+    return t, h
 
 async def main(device_name, address):
-    with BleakClient(address, timeout=60.0) as client:
+    async with BleakClient(address, timeout=60.0) as client:
         try:
-            data = await client.read_gatt_char(CHAR_UUID)
-            temperature, humidity = parse_sensor_data(data)
-            print(f"Reading {a}")
+            tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
+            hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
+            temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
+            print(f"Reading {address}")
             print(f"Temperature: {temperature}")
             print(f"Humidity: {humidity}")
             #print(f"data output: {data}")
         except Exception as e:
-            print(f"Failed for {a}: {e}")
+            print(f"Failed for {address}: {e}")
 
 # --- PARSE NAME, ADDRESS ARGUMENTS AND RUN --- #
 if __name__ == "__main__":
