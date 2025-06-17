@@ -3,8 +3,8 @@ import asyncio # prevents BLE bottlenecking
 import argparse # allows CLI argument passing
 from bleak import BleakClient # allows BLE connection
 
-TMP_CHAR_UUID = "00002235-b38d-4985-720e-0f993a68ee41"
-HUM_CHAR_UUID = "00001235-b38d-4985-720e-0f993a68ee41"
+TMP_CHAR_UUID = "00002234-b38d-4985-720e-0f993a68ee41"
+HUM_CHAR_UUID = "00001234-b38d-4985-720e-0f993a68ee41"
 
 # --- DECODE SENSOR DATA STREAM --- #
 def parse_sensor_data(traw, hraw):

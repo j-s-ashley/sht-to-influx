@@ -14,11 +14,11 @@ async def main(device_name, address):
     with BleakClient(address, timeout=60.0) as client:
         try:
             data = await client.read_gatt_char(CHAR_UUID)
-                temperature, humidity = parse_sensor_data(data)
-                print(f"Reading {a}")
-                print(f"Temperature: {temperature}")
-                print(f"Humidity: {humidity}")
-                #print(f"data output: {data}")
+            temperature, humidity = parse_sensor_data(data)
+            print(f"Reading {a}")
+            print(f"Temperature: {temperature}")
+            print(f"Humidity: {humidity}")
+            #print(f"data output: {data}")
         except Exception as e:
             print(f"Failed for {a}: {e}")
 
