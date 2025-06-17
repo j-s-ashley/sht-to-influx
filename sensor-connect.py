@@ -27,7 +27,7 @@ async def stream_data(client):
             print(f"Humidity: {humidity}")
         except Exception as e:
             print(f"Failed for {address}: {e}")
-	await asyncio.sleep(sleep_time)
+        await asyncio.sleep(sleep_time)
 
 async def main(address):
     async with BleakClient(address, timeout=max_time) as client:
