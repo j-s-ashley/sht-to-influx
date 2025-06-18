@@ -1,6 +1,7 @@
 import argparse # easy bash-to-python info passing
 import asyncio # asynchronous connections
 import struct # allows data unpacking
+import sys 
 from bleak import BleakClient
 
 # --- DEFINITIONS --- #
