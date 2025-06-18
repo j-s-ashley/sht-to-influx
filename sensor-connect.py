@@ -33,6 +33,7 @@ async def stream_data(client):
 async def main(address):
     async with BleakClient(address, timeout=max_time) as client:
         print("Temperature\tHumidity")
+        sys.stdout.flush()
         await stream_data(client)
 
 # --- PARSE NAME, ADDRESS ARGUMENTS AND RUN --- #
