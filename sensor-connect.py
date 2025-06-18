@@ -25,6 +25,7 @@ async def stream_data(client):
             hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
             temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
             print(f"{temperature}\t{humidity}")
+            sys.stdout.flush()
         except Exception as e:
             print(f"Failed for {address}: {e}")
         await asyncio.sleep(sleep_time)
