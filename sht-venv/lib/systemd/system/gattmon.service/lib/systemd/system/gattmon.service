@@ -1,0 +1,10 @@
+[Unit]
+Description=GATT Monitor
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /home/pi/gattmon/run.py
+
+[Install]
+WantedBy=multi-user.target

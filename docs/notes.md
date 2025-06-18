@@ -135,3 +135,11 @@ For the record:
           "temperature": "00002235-b38d-4985-720e-0f993a68ee41",
           "humidity:     "00001235-b38d-4985-720e-0f993a68ee41"
       ]
+
+# Day 8
+
+Okay, I got this.
+
+So, I want the bash script to throw each address at a separate python instance and feed that output into InFlux along with the device_name variable. That way, the python script only needs the address (simplicity!) and I can just use one table (simplicity!) with tag names to sort out the data.
+
+Seems legit.
