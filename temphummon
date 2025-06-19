@@ -25,7 +25,7 @@ for sensor in $sensors; do
     for attempt in $(seq 1 $MAX_RETRIES); do
         echo "Attempt $attempt of $MAX_RETRIES…"
 
-        OUTPUT=$(timeout 60s python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.tabeater.TabEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name")
+        OUTPUT=$(python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.tabeater.TabEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name")
         EXIT_CODE=$?
 
         if [[ $EXIT_CODE -eq 0 ]]; then
