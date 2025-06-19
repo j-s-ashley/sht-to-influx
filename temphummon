@@ -14,17 +14,6 @@ PYTHON_SCRIPT="/opt/local/strips/ITk/sht31-to-influx/sensor-connect.py"
 
 sensors=$(jq -c '.sensors[]' "$JSON_FILE")
 
-# Function to run a single sensor instance
-run_sensor() {
-  local db="$1"
-  local usr="$2"
-  local pwrd="$3"
-  local device_name="$4"
-  local address="$5"
-
-  python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.tabeater.TabEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name"
-}
-
 # Loop through devices in the JSON config
 for sensor in $sensors; do
     device_name=$(echo "$sensor" | jq -r '.device_name')
@@ -36,7 +25,7 @@ for sensor in $sensors; do
     for attempt in $(seq 1 $MAX_RETRIES); do
         echo "Attempt $attempt of $MAX_RETRIES…"
 
-        OUTPUT=$(timeout 60s run_sensor "$db" "$usr" "$pwrd" "$device_name" "$address" &)
+        OUTPUT=$(timeout 60s python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.tabeater.TabEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name")
         EXIT_CODE=$?
 
         if [[ $EXIT_CODE -eq 0 ]]; then
