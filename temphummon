@@ -5,8 +5,14 @@ db=$1
 usr=$2
 pwrd=$3
 
+MAX_RETRIES=10
+DELAY_SECONDS=10
+RETRY_COUNT=0
+
 JSON_FILE="/opt/local/strips/ITk/sht31-to-influx/docs/sensor-info.json"
 PYTHON_SCRIPT="/opt/local/strips/ITk/sht31-to-influx/sensor-connect.py"
+
+sensors=$(jq -c '.sensors[]' "$JSON_FILE")
 
 # Function to run a single sensor instance
 run_sensor() {
@@ -20,11 +26,37 @@ run_sensor() {
 }
 
 # Loop through devices in the JSON config
-jq -c '.[]' "$JSON_FILE" | while read -r row; do
-  device_name=$(echo "$row" | jq -r '.device_name')
-  address=$(echo "$row" | jq -r '.address')
+for sensor in $sensors; do
+    device_name=$(echo "$sensor" | jq -r '.name')
+    address=$(echo "$sensor" | jq -r '.address')
 
-  run_sensor "$db" "$usr" "$pwrd" "$device_name" "$address" &
+    echo "Reading from $device_name ($address)"
+
+    # Try connecting
+    for attempt in $(seq 1 $MAX_RETRIES); do
+        echo "Attempt $attempt of $MAX_RETRIES…"
+
+        OUTPUT=$(run_sensor "$db" "$usr" "$pwrd" "$device_name" "$address" &)
+        EXIT_CODE=$?
+
+        if [[ $EXIT_CODE -eq 0 ]]; then
+          echo "Success: $device_name connected"
+          break
+        fi
+
+        # If error, start count and try again
+        echo "Error on $device_name: $OUTPUT"
+
+        if echo "$OUTPUT" | grep -Ei "timeout|not found|failed to connect"; then
+          echo "Retrying in $DELAY_SECONDS seconds..."
+          sleep $DELAY_SECONDS
+        else
+          echo "Unrecoverable error — skipping $device_name"
+          break
+        fi
+
+        if [[ $attempt -eq $MAX_RETRIES ]]; then
+          echo "Failed after $MAX_RETRIES attempts: $device_name ($address)"
+        fi
+    done
 done
-
-wait

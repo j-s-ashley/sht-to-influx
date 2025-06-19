@@ -1,4 +1,5 @@
-[
+{
+    "sensors": [
         {
             "device_name": "sht-sally",
 	    "device_id":   "VS502081601706",
@@ -41,4 +42,5 @@
             "address":     "CA:2C:31:A4:53:8A",
             "location":    "6040-clean-room"
         }
-]
+    ]
+}
