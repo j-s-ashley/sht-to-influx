@@ -27,7 +27,7 @@ run_sensor() {
 
 # Loop through devices in the JSON config
 for sensor in $sensors; do
-    device_name=$(echo "$sensor" | jq -r '.name')
+    device_name=$(echo "$sensor" | jq -r '.device_name')
     address=$(echo "$sensor" | jq -r '.address')
 
     echo "Reading from $device_name ($address)"
