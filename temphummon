@@ -36,7 +36,7 @@ for sensor in $sensors; do
     for attempt in $(seq 1 $MAX_RETRIES); do
         echo "Attempt $attempt of $MAX_RETRIES…"
 
-        OUTPUT=$(run_sensor "$db" "$usr" "$pwrd" "$device_name" "$address" &)
+        OUTPUT=$(timeout 60s run_sensor "$db" "$usr" "$pwrd" "$device_name" "$address" &)
         EXIT_CODE=$?
 
         if [[ $EXIT_CODE -eq 0 ]]; then
