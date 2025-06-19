@@ -49,6 +49,7 @@ for sensor in $sensors; do
 
         if echo "$OUTPUT" | grep -Ei "timeout|not found|failed to connect"; then
           echo "Retrying in $DELAY_SECONDS seconds..."
+          bluetoothctl disconnect $address
           sleep $DELAY_SECONDS
         else
           echo "Unrecoverable error — skipping $device_name"
