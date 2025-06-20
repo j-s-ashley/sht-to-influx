@@ -28,6 +28,12 @@ for sensor in $sensors; do
         OUTPUT=$(python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.tabeater.TabEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name")
         EXIT_CODE=$?
 
+        if [[$EXIT_CODE -eq 124 ]]; then
+          echo "Timeout occured, retrying $device_name in $DELAY_SECONDS seconds"
+          sleep $DELAY_SECONDS
+          continue
+        fi
+
         if [[ $EXIT_CODE -eq 0 ]]; then
           echo "Success: $device_name connected"
           break
