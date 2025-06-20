@@ -6,8 +6,8 @@ usr=$2
 pwrd=$3
 
 MAX_RETRIES=10
+MAX_WAIT=60
 DELAY_SECONDS=10
-RETRY_COUNT=0
 
 JSON_FILE="/opt/local/strips/ITk/sht31-to-influx/docs/sensor-info.json"
 PYTHON_SCRIPT="/opt/local/strips/ITk/sht31-to-influx/sensor-connect.py"
@@ -21,38 +21,41 @@ for sensor in $sensors; do
 
     echo "Reading from $device_name ($address)"
 
+    RETRY_COUNT=0
+    SUCCESSFUL=false
+
     # Try connecting
-    for attempt in $(seq 1 $MAX_RETRIES); do
-        echo "Attempt $attempt of $MAX_RETRIES…"
+    while [[ RETRY_COUNT -lt MAX_RETRIES ]]; do
+        ((RETRY_COUNT++))
+        echo "Attempt $RETRY_COUNT of $MAX_RETRIES for $device_name"
+       
+        python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.tabeater.TabEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name"
+        PID=$!
 
-        OUTPUT=$(python3 "$PYTHON_SCRIPT" --address "$address" | python3 moneater.py eaters.tabeater.TabEater --host 128.3.50.38 --port 8086 --database "$db" --user "$usr" --password "$pwrd" --table TempHum --tag Name="$device_name")
-        EXIT_CODE=$?
+        # Wait for max time
+        for (( i=0; i<$MAX_WAIT; i++ )); do
+            if ! kill -0 $PID 2>/dev/null; then
+                echo "$device_name completed before timeout"
+                SUCCESSFUL=true
+                break
+            fi
+            sleep 1
+        done
 
-        if [[$EXIT_CODE -eq 124 ]]; then
-          echo "Timeout occured, retrying $device_name in $DELAY_SECONDS seconds"
-          sleep $DELAY_SECONDS
-          continue
+        if [[ "$SUCCESSFUL" = true ]]; then
+            break
         fi
 
-        if [[ $EXIT_CODE -eq 0 ]]; then
-          echo "Success: $device_name connected"
-          break
-        fi
+        echo "$device_name timed out, killing process $PID"
+        kill -9 $PID 2>/dev/null
+        wait $PID 2>/dev/null
 
-        # If error, start count and try again
-        echo "Error on $device_name: $OUTPUT"
-
-        if echo "$OUTPUT" | grep -Ei "timeout|not found|failed to connect"; then
-          echo "Retrying in $DELAY_SECONDS seconds..."
-          bluetoothctl disconnect $address
-          sleep $DELAY_SECONDS
-        else
-          echo "Unrecoverable error — skipping $device_name"
-          break
-        fi
-
-        if [[ $attempt -eq $MAX_RETRIES ]]; then
-          echo "Failed after $MAX_RETRIES attempts: $device_name ($address)"
-        fi
+        echo "Retrying in $DELAY_SECONDS seconds..."
+        sleep $DELAY_SECONDS
     done
+
+    if [[ "$SUCCESSFUL" = false ]]; then
+        echo "$device_name failed after $MAX_RETRIES attempts"
+        echo "$(date): $device_name ($address) failed" >> failed_connections.log
+    fi
 done
