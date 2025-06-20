@@ -2,7 +2,7 @@ import argparse # easy bash-to-python info passing
 import asyncio # asynchronous connections
 import struct # allows data unpacking
 import sys 
-from bleak import BleakClient, BleakError, BleakDeviceNotFoundError
+from bleak import BleakClient, BleakError
 
 # --- DEFINITIONS --- #
 # These are vendor-specific IDs for the temperature/humidity data
@@ -27,9 +27,6 @@ async def stream_data(client):
             temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
             print(f"{temperature}\t{humidity}")
             sys.stdout.flush()
-        except BleakDeviceNotFoundError as e:
-            print(f"BleakDeviceNotFoundError: {e}", file=sys.stderr)
-            sys.exit(2)
         except BleakError as e:
             print(f"BleakError: {e}", file=sys.stderr)
             sys.exit(3)
