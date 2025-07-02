@@ -22,10 +22,10 @@ run_sensor() {
 }
 
 monitor_connection() {
-    while kill -0 "$PID" 2>/dev/null; do
+    while true; do
         if ! bluetoothctl info $ADDRESS | grep -q 'Connected: yes'; then
             SUCCESSFUL=false
-            if [ "$TIMER" -lt "$MAX_WAIT"]; then
+            if [ "$TIMER" -lt "$MAX_WAIT" ]; then
                 TIMER=$((TIMER + 15))
                 sleep 15
             else
