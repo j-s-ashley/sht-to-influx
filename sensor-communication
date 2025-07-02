@@ -1,0 +1,56 @@
+#!/bin/bash
+
+USR=$1
+PWRD=$2
+ADDRESS=$3
+LOCATION=$4
+
+source "${HOME}/sht-to-influx/sht-venv/bin/activate"
+
+MAX_WAIT=60
+RETRY_INTERVAL=15
+PID=0
+TIMER=0
+
+run_sensor() {
+    echo "Starting sensor pipeline for $LOCATION"
+    (
+        python "${HOME}/sht-to-influx/connect.py" --address "$ADDRESS" | \
+        tee /dev/tty | \
+        python "${HOME}/moneater/moneater.py" eaters.tabeater.TabEater \
+            --host 128.3.50.38 \
+            --port 8086 \
+            --database strips_environmental \
+            --user "$USR" --password "$PWRD" \
+            --table TempHum \
+            --tag "Name=$LOCATION"
+    ) &
+    PID=$!
+    echo "Started pipeline with PID $PID"
+}
+
+monitor_connection() {
+    while true; do
+        if bluetoothctl info "$ADDRESS" | grep -q 'Connected: yes'; then
+            TIMER=0
+        else
+            TIMER=$((TIMER + RETRY_INTERVAL))
+            echo "Disconnected from $ADDRESS ($LOCATION) — timer: $TIMER / $MAX_WAIT"
+
+            if [ "$TIMER" -ge "$MAX_WAIT" ]; then
+                echo "Timeout exceeded for $LOCATION. Restarting pipeline..."
+
+                kill -9 $PID 2>/dev/null
+                wait $PID 2>/dev/null
+
+                run_sensor
+                TIMER=0
+            fi
+        fi
+        sleep $RETRY_INTERVAL
+    done
+}
+
+# Start everything
+run_sensor
+monitor_connection
