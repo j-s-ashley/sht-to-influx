@@ -29,7 +29,7 @@ monitor_connection() {
                 TIMER=$((TIMER + 15))
                 sleep 15
             else
-                echo "Sensor at $LOCATION timed out, killing connection attempt $ATTEMPT with process $PID"
+                echo "Sensor at $LOCATION timed out, killing process $PID"
                 kill -9 $PID
                 run_sensor "$USR" "$PWRD" "$ADDRESS" "$LOCATION" &
                 PID=$!
