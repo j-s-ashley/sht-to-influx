@@ -41,7 +41,7 @@ async def stream_data(client):
 
 async def main(address):
     async with BleakClient(address, timeout=max_time) as client:
-        print("Battery %\tTemperature\tHumidity")
+        print("Battery\tTemperature\tHumidity")
         sys.stdout.flush()
         await stream_data(client)
 
