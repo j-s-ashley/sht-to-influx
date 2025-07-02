@@ -19,6 +19,8 @@ while true; do
     for (( i=0; i<$MAX_WAIT; i++ )); do
         if bluetoothctl info $ADDRESS | grep -q 'Connected: yes'; then
             SUCCESSFUL=true
+        else
+            SUCCESSFUL=false
         fi
         sleep 1
     done
