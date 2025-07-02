@@ -13,7 +13,7 @@ SUCCESSFUL=false
 ATTEMPT=0
 
 while true; do
-    if [[ $ATTEMPT = 0]]; do
+    if [[ $ATTEMPT = 0]]; then
         continue
     else
         for (( i=0; i<$MAX_WAIT; i++ )); do
