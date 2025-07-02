@@ -5,6 +5,8 @@ import sys
 from bleak import BleakClient, BleakError
 
 # --- DEFINITIONS --- #
+# ID for battery level, bluetooth default
+BTR_CHAR_UUID = "00002A19-0000-1000-8000-00805f9b34fb"
 # These are vendor-specific IDs for the temperature/humidity data
 TMP_CHAR_UUID = "00002235-b38d-4985-720e-0f993a68ee41"
 HUM_CHAR_UUID = "00001235-b38d-4985-720e-0f993a68ee41"
@@ -22,10 +24,12 @@ def parse_sensor_data(traw, hraw):
 async def stream_data(client):
     while True:
         try:
+            btr_raw = await client.read_gatt_char(BTR_CHAR_UUID)
             tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
             hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
+            battery = int(btr_raw[0])
             temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
-            print(f"{temperature}\t{humidity}")
+            print(f"{battery}\t{temperature}\t{humidity}")
             sys.stdout.flush()
         except BleakError as e:
             print(f"BleakError: {e}", file=sys.stderr)
@@ -37,7 +41,7 @@ async def stream_data(client):
 
 async def main(address):
     async with BleakClient(address, timeout=max_time) as client:
-        print("Temperature\tHumidity")
+        print("Battery %\tTemperature\tHumidity")
         sys.stdout.flush()
         await stream_data(client)
 
