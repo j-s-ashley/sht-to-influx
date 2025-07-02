@@ -35,7 +35,7 @@ monitor_connection() {
             TIMER=0
         else
             TIMER=$((TIMER + RETRY_INTERVAL))
-            echo "Disconnected from $ADDRESS ($LOCATION) — timer: $TIMER / $MAX_WAIT"
+            echo "Connection failed for $ADDRESS ($LOCATION) — timer: $TIMER / $MAX_WAIT"
 
             if [ "$TIMER" -ge "$MAX_WAIT" ]; then
                 echo "Timeout exceeded for $LOCATION. Restarting pipeline..."
