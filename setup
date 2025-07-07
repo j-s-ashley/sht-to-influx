@@ -1,7 +1,8 @@
 #!/bin/bash
 
-apt-get install screen
 apt autoremove
+apt update
+apt install jq
 apt install python3-venv
 
 python -m venv sht-venv
