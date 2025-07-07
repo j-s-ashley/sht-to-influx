@@ -1,0 +1,13 @@
+#!/bin/bash
+
+apt-get install screen
+apt autoremove
+apt install python3-venv
+
+git clone --recurse-submodules https://github.com/j-s-ashley/sht-to-influx.git
+cd sht-to-influx
+python -m venv sht-venv
+
+source sht-venv/bin/activate
+pip install bleak pyyaml influxdb
+deactivate
