@@ -1,0 +1,3 @@
+[submodule "moneater"]
+	path = moneater
+	url = https://gitlab.cern.ch/berkeleylab/moneater.git
