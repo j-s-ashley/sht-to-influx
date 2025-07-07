@@ -17,7 +17,7 @@ run_sensor() {
     (
         python "${HOME}/sht-to-influx/connect.py" --address "$ADDRESS" | \
         tee /dev/tty | \
-        python "${HOME}/moneater/moneater.py" eaters.tabeater.TabEater \
+        python "${HOME}/sht-to-influx/moneater/moneater.py" eaters.tabeater.TabEater \
             --host 128.3.50.38 \
             --port 8086 \
             --database strips_environmental \
