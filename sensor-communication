@@ -16,7 +16,7 @@ run_sensor() {
     echo "Starting sensor pipeline for $LOCATION"
     (
         python "${HOME}/sht-to-influx/connect.py" --address "$ADDRESS" | \
-        tee /dev/tty | \
+        #tee /dev/tty | \
         python "${HOME}/sht-to-influx/moneater/moneater.py" eaters.tabeater.TabEater \
             --host 128.3.50.38 \
             --port 8086 \
