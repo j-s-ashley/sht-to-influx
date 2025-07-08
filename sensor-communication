@@ -31,7 +31,7 @@ run_sensor() {
 
 monitor_connection() {
     while true; do
-        if bluetoothctl info "$ADDRESS" | grep -q 'Connected: yes'; then
+        if bluetoothctl devices Connected | grep -q "$ADDRESS"; then
             TIMER=0
         else
             TIMER=$((TIMER + RETRY_INTERVAL))
