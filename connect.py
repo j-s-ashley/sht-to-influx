@@ -1,8 +1,8 @@
-import argparse # easy bash-to-python info passing
-import asyncio # asynchronous connections
-import struct # allows data unpacking
-import sys 
-from bleak import BleakClient, BleakError
+import argparse
+import struct
+import sys
+import time
+from bluepy.btle import Peripheral, DefaultDelegate, BTLEException
 
 # --- DEFINITIONS --- #
 # ID for battery level, bluetooth default
@@ -21,29 +21,25 @@ def parse_sensor_data(traw, hraw):
     h = struct.unpack('<f', hraw)[0]
     return t, h
 
-async def stream_data(client):
+# --- PRIMARY DATA COLLECTION LOOP --- #
+def stream_data(client):
     while True:
         try:
-            btr_raw = await client.read_gatt_char(BTR_CHAR_UUID)
-            tmp_raw = await client.read_gatt_char(TMP_CHAR_UUID)
-            hum_raw = await client.read_gatt_char(HUM_CHAR_UUID)
+            btr_raw = peripheral.readCharacteristic(peripheral.getCharacteristics(uuid=BTR_CHAR_UUID)[0].getHandle())
+            tmp_raw = peripheral.readCharacteristic(peripheral.getCharacteristics(uuid=TMP_CHAR_UUID)[0].getHandle())
+            hum_raw = peripheral.readCharacteristic(peripheral.getCharacteristics(uuid=HUM_CHAR_UUID)[0].getHandle())
+
             battery = int(btr_raw[0])
             temperature, humidity = parse_sensor_data(tmp_raw, hum_raw)
+
             print(f"{battery}\t{temperature}\t{humidity}")
-            sys.stdout.flush()
-        except BleakError as e:
-            print(f"BleakError: {e}", file=sys.stderr)
+
+        except BTLEException as e:
+            print(f"BTLEException: {e}", file=sys.stderr)
             sys.exit(3)
         except Exception as e:
             print(f"Unexpected error: {e}", file=sys.stderr)
             sys.exit(1)
-        await asyncio.sleep(sleep_time)
-
-async def main(address):
-    async with BleakClient(address, timeout=max_time) as client:
-        print("Battery\tTemperature\tHumidity")
-        sys.stdout.flush()
-        await stream_data(client)
 
 # --- PARSE NAME, ADDRESS ARGUMENTS AND RUN --- #
 if __name__ == "__main__":
@@ -59,4 +55,9 @@ if __name__ == "__main__":
     args        = parser.parse_args()
     address     = args.address
 
-    asyncio.run(main(address))
+    try:
+        peripheral = Peripheral(address)
+        stream_data(peripheral)
+    except BTLEException as e:
+        print(f"Connection error: {e}", file=sys.stderr)
+        sys.exit(2)
