@@ -1,0 +1,30 @@
+#!/bin/bash
+
+DEVICE=$1
+CONFIG_DIR="${HOME}/sht-to-influx/config"
+
+DEVICE_JSON="$CONFIG_DIR/sensor-list.json"
+AUTH_JSON="$CONFIG_DIR/auth-config.json"
+
+ADDRESS=$(jq -r --arg inst "$DEVICE" '.[$inst].address' "$DEVICE_JSON")
+LOCATION=$(jq -r --arg inst "$DEVICE" '.[$inst].location' "$DEVICE_JSON")
+USR=$(jq -r '.user' "$AUTH_JSON")
+PWRD=$(jq -r '.password' "$AUTH_JSON")
+
+if [ -z "$ADDRESS" ] || [ "$ADDRESS" == "null" ]; then
+  echo "Error: No config found for instance '$INSTANCE'"
+  exit 1
+fi
+
+source "${HOME}/sht-to-influx/sht-venv/bin/activate"
+
+echo "[$(date)] Starting sensor pipeline for $LOCATION at $ADDRESS"
+
+python "${HOME}/sht-to-influx/connect.py" --address "$ADDRESS" | \
+python "${HOME}/sht-to-influx/moneater/moneater.py" eaters.tabeater.TabEater \
+    --host 128.3.50.38 \
+    --port 8086 \
+    --database strips_environmental \
+    --user "$USR" --password "$PWRD" \
+    --table TempHum \
+    --tag "Name=$LOCATION"

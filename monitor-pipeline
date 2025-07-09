@@ -1,0 +1,20 @@
+#!/bin/bash
+
+DEVICE=$1
+CONFIG_DIR="${HOME}/sht-to-influx/sensor_configs"
+DEVICE_JSON="$CONFIG_DIR/device_config.json"
+
+ADDRESS=$(jq -r --arg inst "$DEVICE" '.[$inst].address' "$DEVICE_JSON")
+
+if [ -z "$ADDRESS" ] || [ "$ADDRESS" == "null" ]; then
+  echo "Error: No config found for device '$DEVICE'"
+  exit 1
+fi
+
+while true; do
+    if ! bluetoothctl info "$ADDRESS" | grep -q 'Connected: yes'; then
+        echo "[$(date)] Disconnected from $DEVICE, restarting sensor@${DEVICE}.service"
+        systemctl restart "sensor@${DEVICE}.service"
+    fi
+    sleep 15
+done
