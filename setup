@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PI_NAME="dewypi"
+
 apt autoremove
 apt update
 apt install jq
@@ -10,3 +12,26 @@ python -m venv sht-venv
 source sht-venv/bin/activate
 pip install bleak pyyaml influxdb
 deactivate
+
+cp sht@.service /etc/systemd/system/sht@.service
+cp monitor-sht@.service /etc/systemd/system/monitor-sht@.service
+
+CONFIG_FILE="/home/$PI_NAME/sht-to-influx/config/sensor-list.json"
+
+# Check that the config file exists
+if [ ! -f "$CONFIG_FILE" ]; then
+  echo "Error: Config file not found at $CONFIG_FILE"
+  exit 1
+fi
+
+# Loop through sensor keys in the JSON
+jq -r 'keys[]' "$CONFIG_FILE" | while read -r DEVICE; do
+  echo "Setting up sensor: $DEVICE"
+
+  sudo systemctl enable "sht@$DEVICE.service"
+  sudo systemctl start "sht@$DEVICE.service"
+
+  sudo systemctl enable "monitor-sht@$DEVICE.service"
+  sudo systemctl start "monitor-sht@$DEVICE.service"
+done
+

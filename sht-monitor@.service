@@ -1,0 +1,13 @@
+[Unit]
+Description=Bluetooth Monitor for %i
+After=sht@%i.service
+Requires=sht@%i.service
+
+[Service]
+Type=simple
+ExecStart=/home/dewypi/sht-to-influx/monitor-pipeline %i
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

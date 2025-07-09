@@ -1,0 +1,16 @@
+[Unit]
+Description=Sensor Pipeline for %i
+After=network-online.target bluetooth.target
+Requires=bluetooth.target
+
+[Service]
+Type=simple
+ExecStart=/home/dewypi/sht-to-influx/run-pipeline %i
+Restart=on-failure
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+MemoryMax=100M
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target
