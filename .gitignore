@@ -1,3 +1,4 @@
 __*
+config/auth-config.json
 sht-venv/*
 .DS_Store
