@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEVICE=$1
-CONFIG_DIR="${HOME}/sht-to-influx/config"
+CONFIG_DIR="~/sht-to-influx/config"
 
 DEVICE_JSON="$CONFIG_DIR/sensor-list.json"
 AUTH_JSON="$CONFIG_DIR/auth-config.json"
@@ -16,12 +16,12 @@ if [ -z "$ADDRESS" ] || [ "$ADDRESS" == "null" ]; then
   exit 1
 fi
 
-source "${HOME}/sht-to-influx/sht-venv/bin/activate"
+source "~/sht-to-influx/sht-venv/bin/activate"
 
 echo "[$(date)] Starting sensor pipeline for $LOCATION at $ADDRESS"
 
-python "${HOME}/sht-to-influx/connect.py" --address "$ADDRESS" | \
-python "${HOME}/sht-to-influx/moneater/moneater.py" eaters.tabeater.TabEater \
+python "~/sht-to-influx/connect.py" --address "$ADDRESS" | \
+python "~/sht-to-influx/moneater/moneater.py" eaters.tabeater.TabEater \
     --host 128.3.50.38 \
     --port 8086 \
     --database strips_environmental \
