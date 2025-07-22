@@ -1,7 +1,7 @@
 {
-    "sht-sally": {
-    "device_id":   "VS502081601706",
-    "address":     "E1:63:4D:D6:6A:48",
+    "sht-shawna": {
+    "device_id":   "VS501929202931",
+    "address":     "E0:C6:BC:1A:E7:A9",
     "location":    "6040-dry-box-left-1"
     },
     "sht-monica": {
@@ -19,9 +19,9 @@
     "address":     "E7:C4:07:89:87:80",
     "location":    "6040-dry-box-left-4"
     },
-    "sht-shawna": {
-    "device_id":   "VS501929202931",
-    "address":     "E0:C6:BC:1A:E7:A9",
+    "sht-sally": {
+    "device_id":   "VS502081601706",
+    "address":     "E1:63:4D:D6:6A:48",
     "location":    "6040-dry-box-left-5"
     },
     "sht-demarcus": {
