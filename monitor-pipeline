@@ -1,8 +1,10 @@
 #!/bin/bash
 
 DEVICE=$1
-CONFIG_DIR="${HOME}/sht-to-influx/sensor_configs"
-DEVICE_JSON="$CONFIG_DIR/device_config.json"
+PI_NAME="dewypi"
+HOME_DIR="/home/$PI_NAME"
+CONFIG_DIR="${HOME}/sht-to-influx/config"
+DEVICE_JSON="$CONFIG_DIR/sensor_list.json"
 
 ADDRESS=$(jq -r --arg inst "$DEVICE" '.[$inst].address' "$DEVICE_JSON")
 
@@ -16,5 +18,5 @@ while true; do
         echo "[$(date)] Disconnected from $DEVICE, restarting sensor@${DEVICE}.service"
         systemctl restart "sensor@${DEVICE}.service"
     fi
-    sleep 15
+    sleep 45
 done
