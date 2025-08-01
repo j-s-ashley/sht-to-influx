@@ -4,7 +4,7 @@ DEVICE=$1
 PI_NAME="dewypi"
 HOME_DIR="/home/$PI_NAME"
 CONFIG_DIR="${HOME}/sht-to-influx/config"
-DEVICE_JSON="$CONFIG_DIR/sensor_list.json"
+DEVICE_JSON="$CONFIG_DIR/sensor-list.json"
 
 ADDRESS=$(jq -r --arg inst "$DEVICE" '.[$inst].address' "$DEVICE_JSON")
 
@@ -14,9 +14,9 @@ if [ -z "$ADDRESS" ] || [ "$ADDRESS" == "null" ]; then
 fi
 
 while true; do
+    sleep 45
     if ! bluetoothctl info "$ADDRESS" | grep -q 'Connected: yes'; then
         echo "[$(date)] Disconnected from $DEVICE, restarting sensor@${DEVICE}.service"
         systemctl restart "sensor@${DEVICE}.service"
     fi
-    sleep 45
 done
