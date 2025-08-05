@@ -3,7 +3,7 @@
 DEVICE=$1
 PI_NAME="dewypi"
 HOME_DIR="/home/$PI_NAME"
-CONFIG_DIR="${HOME}/sht-to-influx/config"
+CONFIG_DIR="${HOME_DIR}/sht-to-influx/config"
 DEVICE_JSON="$CONFIG_DIR/sensor-list.json"
 
 ADDRESS=$(jq -r --arg inst "$DEVICE" '.[$inst].address' "$DEVICE_JSON")
