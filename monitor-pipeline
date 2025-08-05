@@ -16,7 +16,7 @@ fi
 while true; do
     sleep 45
     if ! bluetoothctl info "$ADDRESS" | grep -q 'Connected: yes'; then
-        echo "[$(date)] Disconnected from $DEVICE, restarting sensor@${DEVICE}.service"
-        systemctl restart "sensor@${DEVICE}.service"
+        echo "[$(date)] Disconnected from $DEVICE, restarting sht@${DEVICE}.service"
+        systemctl restart "sht@${DEVICE}.service"
     fi
 done
